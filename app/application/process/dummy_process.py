@@ -3,7 +3,6 @@ from settings.console_styles import Style
 
 
 class DummyProcess(BaseProcess):
-
     def run(self):
         self.start_running()
 

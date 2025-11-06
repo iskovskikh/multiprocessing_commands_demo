@@ -13,7 +13,9 @@ class CommandMediator(ABC, Generic[CT, CR]):
     )
 
     @abstractmethod
-    def register_command(self, command: type[CT], handlers: Iterable[CommandHandler[CT, CR]]): ...
+    def register_command(
+        self, command: type[CT], handlers: Iterable[CommandHandler[CT, CR]]
+    ): ...
 
     @abstractmethod
     def handle_command(self, command: CT) -> Iterable[CR]: ...

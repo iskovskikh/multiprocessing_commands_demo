@@ -4,7 +4,8 @@ import signal
 import time
 from typing import Any
 
-from application.process.dummy_process import DummyProcessChecker
+from application.process.a_process import AProcessChecker
+from infra.queue_manager import QueueManager
 
 logger = logging.getLogger(__name__)
 
@@ -19,13 +20,15 @@ def handle_signal(signum: int, frame: Any):
 
 
 def run():
+    QueueManager.init_queue_container()
+
     checkers = [
-        DummyProcessChecker(),
+        # DummyProcessChecker(),
+        AProcessChecker(),
     ]
 
     for checker in checkers:
         checker.start()
-
 
     logger.info("Все процессы запущены. Ожидание сигнала завершения...")
 
@@ -56,5 +59,5 @@ def main():
     logger.info("Выход из программы.")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

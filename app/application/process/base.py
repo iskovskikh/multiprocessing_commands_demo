@@ -38,9 +38,9 @@ class ProcessChecker[BaseProcessType: BaseProcess]:
     process_type: type[BaseProcessType]
 
     def __init__(
-            self,
-            *process_args,
-            **process_kwargs,
+        self,
+        *process_args,
+        **process_kwargs,
     ) -> None:
         self.log = logging.getLogger(self.__class__.__name__)
         self.process_args = process_args
@@ -55,7 +55,9 @@ class ProcessChecker[BaseProcessType: BaseProcess]:
 
     def restart(self) -> None:
         self.log.info(
-            f"Restart process '{self.process_instance.name}'(pid={self.process_instance.pid})"
+            f"Restart process"
+            f" {Style.CGREEN}{self.process_instance.name}{Style.CEND}"
+            f" [{Style.CBEIGE}{self.process_instance.pid}{Style.CEND}]"
         )
         self.stop()
         self.process_instance: BaseProcessType = self.process_type(
@@ -65,24 +67,33 @@ class ProcessChecker[BaseProcessType: BaseProcess]:
         self.start()
 
     def start(self) -> None:
-        self.log.info(f"Starting process '{self.process_instance.name}'")
+        self.log.info(
+            f"Starting process"
+            f" {Style.CGREEN}{self.process_instance.name}{Style.CEND}"
+        )
         try:
             self.process_instance.start()
             self.log.info(
-                f"Started process {self.process_instance.name}"
+                f"Started process"
+                f" {Style.CGREEN}{self.process_instance.name}{Style.CEND}"
                 f" [{Style.CBEIGE}{self.process_instance.pid}{Style.CEND}]"
             )
 
         except Exception as ex:
             self.log.exception(
-                f"Caught exception {ex.__repr__()} while starting '{self.process_instance.name}'"
+                f"Caught exception {ex.__repr__()}"
+                f" while starting"
+                f" {Style.CGREEN}{self.process_instance.name}{Style.CEND}"
+                f" [{Style.CBEIGE}{self.process_instance.pid}{Style.CEND}]"
             )
             self.stop()
             exit()
 
     def stop(self) -> None:
         self.log.warning(
-            f"Stop process '{self.name}' [{Style.CBEIGE}{self.process_instance.pid}{Style.CEND}]"
+            f"Stop process"
+            f" {Style.CGREEN}{self.name}{Style.CEND}"
+            f" [{Style.CBEIGE}{self.process_instance.pid}{Style.CEND}]"
         )
         self.process_instance.stop_running()
         self.process_instance.join(3)
@@ -90,13 +101,15 @@ class ProcessChecker[BaseProcessType: BaseProcess]:
         if exitcode is None:
             self.process_instance.kill()
             self.log.warning(
-                f"Process '{self.name}'"
+                f"Process "
+                f" {Style.CGREEN}{self.name}{Style.CEND}"
                 f" [{Style.CBEIGE}{self.process_instance.pid}{Style.CEND}]"
                 f" forcibly killed"
             )
         else:
             self.log.info(
-                f"Process '{self.name}'"
+                f"Process "
+                f" {Style.CGREEN}{self.name}{Style.CEND}"
                 f" [{Style.CBEIGE}{self.process_instance.pid}{Style.CEND}]"
                 f" gracefully stopped with code {exitcode}"
             )
